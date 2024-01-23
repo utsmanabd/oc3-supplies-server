@@ -42,7 +42,9 @@ router.put('/plant/:id', PlantController.updateFactoryPlant)
 
 // Prodplan
 router.get('/prodplan', ProdplanController.getAllProdplan)
+router.get('/prodplan/year', ProdplanController.getProdplanGroupYears)
 router.get('/prodplan/:id', ProdplanController.getProdplanById)
+router.get('/prodplan/year/:year', ProdplanController.getProdplanByYear)
 router.post('/prodplan', ProdplanController.insertProdplan)
 router.put('/prodplan/:id', ProdplanController.updateProdplan)
 

@@ -20,6 +20,25 @@ const getProdplanById = async (req, res) => {
     }
 }
 
+const getProdplanByYear = async (req, res) => {
+    if (!isNaN(req.params.year)) {
+        let data = await model.getByYear(req.params.year);
+        return api.ok(res, data);
+    } else {
+        return api.error(res, "Bad Request", 400);
+    }
+}
+
+const getProdplanGroupYears = async (req, res) => {
+    try {
+        let data = await model.getGroupYears();
+        return api.ok(res, data);
+    } catch (err) {
+        console.error(err);
+        return api.error(res, `${err.name}: ${err.message}`, 500)
+    }
+}
+
 const insertProdplan = async (req, res) => {
     try {
         let data = await model.insert(req.body.form_data);
@@ -44,5 +63,7 @@ module.exports = {
     getAllProdplan,
     getProdplanById,
     insertProdplan,
-    updateProdplan
+    updateProdplan,
+    getProdplanGroupYears,
+    getProdplanByYear
 }

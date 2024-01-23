@@ -40,9 +40,23 @@ const updateMaterial = async (req, res) => {
     }
 }
 
+// const inject = async () => {
+//     let injectionData = await model.getInjectAvg()
+//     let totalMaterial = 0
+//     injectionData.forEach( async data => {
+//         let material = await model.getByCode(data.material_code)
+//         if (material.length > 0) {
+//             let avgPriceData = { average_price: data.average_price }
+//             await model.updateByCode(data.material_code, avgPriceData)
+//             totalMaterial++
+//             console.log(`Data-${totalMaterial} added`);
+//         }
+//     })
+// }
+
 module.exports = {
     getAllMaterial,
     getMaterialById,
     insertMaterial,
-    updateMaterial
+    updateMaterial,
 }
