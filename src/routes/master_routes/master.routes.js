@@ -45,12 +45,15 @@ router.get('/prodplan', ProdplanController.getAllProdplan)
 router.get('/prodplan/year', ProdplanController.getProdplanGroupYears)
 router.get('/prodplan/:id', ProdplanController.getProdplanById)
 router.get('/prodplan/year/:year', ProdplanController.getProdplanByYear)
+router.get('/prodplan/year-line/:year/:line', ProdplanController.getProdplanByYearAndLine)
 router.post('/prodplan', ProdplanController.insertProdplan)
 router.put('/prodplan/:id', ProdplanController.updateProdplan)
 
 // Supplies Budget
 router.get('/supplies', SuppliesController.getAllSuppliesBudget)
 router.get('/supplies/:id', SuppliesController.getSuppliesBudgetById)
+router.get('/supplies/year-line/:year/:line', SuppliesController.getSuppliesByYearAndLine)
+router.get('/supplies/year-costctr/:year/:costctr', SuppliesController.getSuppliesByYearAndCostCenter)
 router.post('/supplies', SuppliesController.insertSuppliesBudget)
 router.put('/supplies/:id', SuppliesController.updateSuppliesBudget)
 

@@ -29,6 +29,15 @@ const getProdplanByYear = async (req, res) => {
     }
 }
 
+const getProdplanByYearAndLine = async (req, res) => {
+    if (!isNaN(req.params.year) && !isNaN(req.params.line)) {
+        let data = await model.getByYearAndLine(req.params.year, req.params.line);
+        return api.ok(res, data);
+    } else {
+        return api.error(res, "Bad Request", 400);
+    }
+}
+
 const getProdplanGroupYears = async (req, res) => {
     try {
         let data = await model.getGroupYears();
@@ -65,5 +74,6 @@ module.exports = {
     insertProdplan,
     updateProdplan,
     getProdplanGroupYears,
-    getProdplanByYear
+    getProdplanByYear,
+    getProdplanByYearAndLine
 }
