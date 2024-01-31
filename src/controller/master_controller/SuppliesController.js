@@ -18,7 +18,7 @@ const getSuppliesByYearAndLine = async (req, res) => {
             let transformedData = transformSuppliesViewData(data)
             return api.ok(res, transformedData);
         } else {
-            return api.error(res, `Data not found`, 400);
+            return api.ok(res, data);
         }
     } else {
         return api.error(res, "Bad Request", 400);
@@ -32,7 +32,7 @@ const getSuppliesByYearAndCostCenter = async (req, res) => {
             let transformedData = transformSuppliesViewData(data)
             return api.ok(res, transformedData);
         } else {
-            return api.error(res, `Data not found`, 400);
+            return api.ok(res, data);
         }
     } else {
         return api.error(res, "Bad Request", 400);
@@ -77,7 +77,7 @@ const transformSuppliesViewData = (data) => {
                 existingObject.budgeting_data.push({
                     month: originalObj.month,
                     prodplan: originalObj.prodplan,
-                    totak_week: originalObj.totak_week,
+                    total_week: originalObj.total_week,
                     quantity: originalObj.quantity,
                     price: originalObj.price,
                     prodplan_id: originalObj.prodplan_id
@@ -95,6 +95,7 @@ const transformSuppliesViewData = (data) => {
                     uom: originalObj.uom,
                     average_price: originalObj.average_price,
                     bom: originalObj.bom,
+                    // supplies_id: originalObj.supplies_id,
                     calculation_id: originalObj.calculation_id,
                     cost_ctr_id: originalObj.cost_ctr_id,
                     line_id: originalObj.line_id,
@@ -103,7 +104,7 @@ const transformSuppliesViewData = (data) => {
                         {
                             month: originalObj.month,
                             prodplan: originalObj.prodplan,
-                            totak_week: originalObj.totak_week,
+                            total_week: originalObj.total_week,
                             quantity: originalObj.quantity,
                             price: originalObj.price,
                             prodplan_id: originalObj.prodplan_id
