@@ -30,8 +30,10 @@ router.put('/line/:id', LineController.updateLine)
 
 // Material Supplies
 router.get('/material', MaterialController.getAllMaterial)
+router.get('/material/with-price', MaterialController.getMaterialWithPriceAvailable)
 router.get('/material/:id', MaterialController.getMaterialById)
-router.post('/material', MaterialController.insertMaterial)
+router.post('/material', MaterialController.insertMaterial);
+router.post('/material/search', MaterialController.searchMaterial);
 router.put('/material/:id', MaterialController.updateMaterial)
 
 // Factory Plant

@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.status(200).json({
     status: true,
-    service: "activity-cilt-api",
+    service: "oc3-supplies-api",
   });
 });
 

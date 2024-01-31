@@ -40,9 +40,32 @@ const updateMaterial = async (req, res) => {
     }
 }
 
+const getMaterialWithPriceAvailable = async (req, res) => {
+    try {
+        let data = await model.getAllWithPriceAvailable()
+        return api.ok(res, data)
+    } catch (err) {
+        console.error(err);
+        return api.error(res, `${err.name}: ${err.message}`, 500)
+    }
+}
+
+const searchMaterial = async (req, res) => {
+    try {
+        let query = req.body.search
+        let data = await model.searchWithPriceAvailable(query)
+        return api.ok(res, data)
+    } catch (err) {
+        console.error(err)
+        return api.error(res, `${err.name}: ${err.message}`, 500)
+    }
+}
+
 module.exports = {
     getAllMaterial,
     getMaterialById,
     insertMaterial,
     updateMaterial,
+    getMaterialWithPriceAvailable,
+    searchMaterial
 }
