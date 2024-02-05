@@ -13,7 +13,7 @@ const getById = async (id) =>
 const insert = async (data) => await db("tr_supplies_budget").insert(data);
 
 const update = async (id, data) =>
-  await db("tr_supplies_budget").where("id", id).update(data);
+  await db("tr_supplies_budget").where("budget_id", id).update(data);
 
 const getByYearAndLine = async (year, lineId) =>
   await db.select("*").from("v_supplies_budgeting").where("year", year).where("line_id", lineId)

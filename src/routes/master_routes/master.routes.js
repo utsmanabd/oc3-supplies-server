@@ -60,6 +60,7 @@ router.get('/supplies/year-line/:year/:line', SuppliesController.getSuppliesByYe
 router.get('/supplies/year-costctr/:year/:costctr', SuppliesController.getSuppliesByYearAndCostCenter)
 router.get('/supplies/budget-id/is-available/:budgetid', SuppliesController.isBudgetIdExist)
 router.post('/supplies', SuppliesController.insertSuppliesBudget)
+router.post('/supplies/multiple', SuppliesController.updateMultipleSupplies)
 router.put('/supplies/:id', SuppliesController.updateSuppliesBudget)
 
 // Users

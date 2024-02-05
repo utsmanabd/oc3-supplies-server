@@ -90,6 +90,19 @@ const isBudgetIdExist = async (req, res) => {
     }
 }
 
+const updateMultipleSupplies = async (req, res) => {
+    try {
+        let requestData = req.body.form_data
+        requestData.forEach(async (item) => {
+            await model.update(item.budget_id, item.data)
+        })
+        return api.ok(res, requestData)
+    } catch (err) {
+        console.error(err);
+        return api.error(res, `${err.name}: ${err.message}`, 500)
+    }
+}
+
 const transformSuppliesViewData = (data) => {
     const transformedArray = []
     if (Array.isArray(data)) {
@@ -149,5 +162,6 @@ module.exports = {
     updateSuppliesBudget,
     getSuppliesByYearAndLine,
     getSuppliesByYearAndCostCenter,
-    isBudgetIdExist
+    isBudgetIdExist,
+    updateMultipleSupplies
 }
