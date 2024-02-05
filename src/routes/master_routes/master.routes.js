@@ -61,7 +61,8 @@ router.get('/supplies/year-costctr/:year/:costctr', SuppliesController.getSuppli
 router.get('/supplies/budget-id/is-available/:budgetid', SuppliesController.isBudgetIdExist)
 router.post('/supplies', SuppliesController.insertSuppliesBudget)
 router.post('/supplies/multiple', SuppliesController.updateMultipleSupplies)
-router.put('/supplies/:id', SuppliesController.updateSuppliesBudget)
+router.post('/supplies/budget-prodplan/:budgetid', SuppliesController.updateWithBudgetAndProdplanId)
+router.put('/supplies/:budgetid', SuppliesController.updateSuppliesBudget)
 
 // Users
 router.get('/users', UserController.getAllUsers)

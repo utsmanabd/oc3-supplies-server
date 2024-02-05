@@ -60,7 +60,7 @@ const insertSuppliesBudget = async (req, res) => {
 
 const updateSuppliesBudget = async (req, res) => {
     try {
-        let data = await model.update(req.params.id, req.body.form_data);
+        let data = await model.updateByBudgetId(req.params.budgetid, req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
         console.error(err);
@@ -90,11 +90,27 @@ const isBudgetIdExist = async (req, res) => {
     }
 }
 
+const updateWithBudgetAndProdplanId = async (req, res) => {
+    try {
+        let budgetId = req.params.budgetid
+        let requestData = req.body.form_data
+        if (Array.isArray(requestData) && requestData.length == 12) {
+            requestData.forEach(data => {
+                model.updateByBudgetAndProdplanId(budgetId, data.prodplan_id, data)
+            })
+            return api.ok(res, requestData)
+        } else return api.error(res, `Data length is less than 12`, 400)
+    } catch (err) {
+        console.error(err);
+        return api.error(res, `${err.name}: ${err.message}`, 500)
+    }
+}
+
 const updateMultipleSupplies = async (req, res) => {
     try {
         let requestData = req.body.form_data
         requestData.forEach(async (item) => {
-            await model.update(item.budget_id, item.data)
+            await model.updateByBudgetId(item.budget_id, item.data)
         })
         return api.ok(res, requestData)
     } catch (err) {
@@ -110,6 +126,7 @@ const transformSuppliesViewData = (data) => {
             const existingObject = transformedArray.find((transformedObj) => transformedObj.budget_id === originalObj.budget_id);
             if (existingObject) {
                 existingObject.budgeting_data.push({
+                    supplies_id: originalObj.supplies_id,
                     month: originalObj.month,
                     prodplan: originalObj.prodplan,
                     total_week: originalObj.total_week,
@@ -130,13 +147,13 @@ const transformSuppliesViewData = (data) => {
                     uom: originalObj.uom,
                     average_price: originalObj.average_price,
                     bom: originalObj.bom,
-                    // supplies_id: originalObj.supplies_id,
                     calculation_id: originalObj.calculation_id,
                     cost_ctr_id: originalObj.cost_ctr_id,
                     line_id: originalObj.line_id,
                     material_id: originalObj.material_id,
                     budgeting_data: [
                         {
+                            supplies_id: originalObj.supplies_id,
                             month: originalObj.month,
                             prodplan: originalObj.prodplan,
                             total_week: originalObj.total_week,
@@ -163,5 +180,6 @@ module.exports = {
     getSuppliesByYearAndLine,
     getSuppliesByYearAndCostCenter,
     isBudgetIdExist,
-    updateMultipleSupplies
+    updateMultipleSupplies,
+    updateWithBudgetAndProdplanId
 }

@@ -13,7 +13,7 @@ const getById = async (id) =>
 const insert = async (data) => await db("tr_supplies_budget").insert(data);
 
 const update = async (id, data) =>
-  await db("tr_supplies_budget").where("budget_id", id).update(data);
+  await db("tr_supplies_budget").where("id", id).update(data);
 
 const getByYearAndLine = async (year, lineId) =>
   await db.select("*").from("v_supplies_budgeting").where("year", year).where("line_id", lineId)
@@ -24,6 +24,12 @@ const getByYearAndCostCenter = async (year, costCtrId) =>
 const getByBudgetId = async (budgetId) =>
   await db.select("*").from("v_supplies_budgeting").where("budget_id", budgetId)
 
+const updateByBudgetId = async (id, data) =>
+  await db("tr_supplies_budget").where("budget_id", id).update(data);
+
+const updateByBudgetAndProdplanId = async (budgetId, prodplanId, data) =>
+  await db("tr_supplies_budget").where("budget_id", budgetId).where("prodplan_id", prodplanId).update(data)
+
 module.exports = {
   getAll,
   getById,
@@ -31,5 +37,7 @@ module.exports = {
   update,
   getByYearAndLine,
   getByYearAndCostCenter,
-  getByBudgetId
+  getByBudgetId,
+  updateByBudgetId,
+  updateByBudgetAndProdplanId
 };
