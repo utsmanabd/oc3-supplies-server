@@ -40,9 +40,21 @@ const updateCostCenter = async (req, res) => {
     }
 }
 
+const searchCostCenter = async (req, res) => {
+    try {
+        let query = req.body.search
+        let data = await model.search(query)
+        return api.ok(res, data)
+    } catch (err) {
+        console.error(err)
+        return api.error(res, `${err.name}: ${err.message}`, 500)
+    }
+}
+
 module.exports = {
     getAllCostCenter,
     getCostCenterById,
     insertCostCenter,
-    updateCostCenter
+    updateCostCenter,
+    searchCostCenter
 }

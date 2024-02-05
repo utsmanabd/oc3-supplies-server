@@ -68,6 +68,28 @@ const updateSuppliesBudget = async (req, res) => {
     }
 }
 
+const isBudgetIdExist = async (req, res) => {
+    let budgetId = req.params.budgetid
+    try {
+        let data = await model.getByBudgetId(budgetId)
+        if (data.length == 0) {
+            return res.json({
+                is_available: true,
+                message: 'Budget ID available'
+            })
+        }
+        return res.json({
+            is_available: false,
+            length: data.length,
+            message: 'Budget ID already exists!'
+        })
+        
+    } catch (err) {
+        console.error(err);
+        return api.error(res, `${err.name}: ${err.message}`, 500)
+    }
+}
+
 const transformSuppliesViewData = (data) => {
     const transformedArray = []
     if (Array.isArray(data)) {
@@ -126,5 +148,6 @@ module.exports = {
     insertSuppliesBudget,
     updateSuppliesBudget,
     getSuppliesByYearAndLine,
-    getSuppliesByYearAndCostCenter
+    getSuppliesByYearAndCostCenter,
+    isBudgetIdExist
 }

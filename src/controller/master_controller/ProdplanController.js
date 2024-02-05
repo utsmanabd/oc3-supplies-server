@@ -68,6 +68,24 @@ const updateProdplan = async (req, res) => {
     }
 }
 
+const isProdplanExists = async (req, res) => {
+    if (!isNaN(req.params.year) && !isNaN(req.params.line)) {
+        let data = await model.getByYearAndLine(req.params.year, req.params.line);
+        if (data.length > 0) {
+            return res.status(200).json({
+                is_available: false,
+                message: `Prodplan already exists!`
+            })
+        } 
+        return res.status(200).json({
+            is_available: true,
+            message: `Prodplan available!`
+        });
+    } else {
+        return api.error(res, "Bad Request", 400);
+    }
+}
+
 module.exports = {
     getAllProdplan,
     getProdplanById,
@@ -75,5 +93,6 @@ module.exports = {
     updateProdplan,
     getProdplanGroupYears,
     getProdplanByYear,
-    getProdplanByYearAndLine
+    getProdplanByYearAndLine,
+    isProdplanExists
 }

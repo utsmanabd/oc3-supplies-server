@@ -53,7 +53,7 @@ const getMaterialWithPriceAvailable = async (req, res) => {
 const searchMaterial = async (req, res) => {
     try {
         let query = req.body.search
-        let data = await model.searchWithPriceAvailable(query)
+        let data = await model.search(query)
         return api.ok(res, data)
     } catch (err) {
         console.error(err)
