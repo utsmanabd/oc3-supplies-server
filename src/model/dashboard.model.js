@@ -19,7 +19,8 @@ const getBudgetPerMonthByLine = async (year, lineId) =>
         .select('vsb.month')
         .sum('vsb.price as price')
         .where('vsb.budget_id', 'like', `%${year}-${lineId}%`)
-        .groupBy('vsb.month');
+        .groupBy('vsb.month')
+        .orderBy('vsb.month')
 
 const getBudgetPerSupplyByLine = async (year, lineId) =>
     await db('v_supplies_budgeting as vsb')
@@ -49,7 +50,8 @@ const getBudgetPerMonthBySection = async (year, lineId, costCtrId) =>
         .select('vsb.month')
         .sum('vsb.price as price')
         .where('vsb.budget_id', 'like', `%${year}-${lineId}-${costCtrId}%`)
-        .groupBy('vsb.month');
+        .groupBy('vsb.month')
+        .orderBy('vsb.month')
 
 module.exports = {
     getBudgetPerLineByYear,
