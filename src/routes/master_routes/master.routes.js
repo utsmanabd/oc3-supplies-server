@@ -8,6 +8,7 @@ const MaterialController = require('../../controller/master_controller/MaterialC
 const PlantController = require('../../controller/master_controller/PlantController');
 const ProdplanController = require('../../controller/master_controller/ProdplanController');
 const SuppliesController = require('../../controller/master_controller/SuppliesController');
+const DashboardController = require('../../controller/master_controller/DashboardController');
 
 
 // Calculation Budget
@@ -31,6 +32,7 @@ router.put('/line/:id', LineController.updateLine)
 
 // Material Supplies
 router.get('/material', MaterialController.getAllMaterial)
+router.get('/material/pagination', MaterialController.getMaterialByPagination)
 router.get('/material/with-price', MaterialController.getMaterialWithPriceAvailable)
 router.get('/material/:id', MaterialController.getMaterialById)
 router.post('/material', MaterialController.insertMaterial);
@@ -71,5 +73,14 @@ router.get('/users/:id', UserController.getUserByNik)
 router.get('/users/is-exists/:nik', UserController.isNIKExists)
 router.post('/users', UserController.insertUser)
 router.put('/users/:id', UserController.updateUser)
+
+// Dashboard
+router.get('/dashboard/line-by-year', DashboardController.getBudgetPerLineByYear)
+router.get('/dashboard/section-by-line', DashboardController.getBudgetPerSectionByLine)
+router.get('/dashboard/month-by-line', DashboardController.getBudgetPerMonthByLine)
+router.get('/dashboard/supply-by-line', DashboardController.getBudgetPerSupplyByLine)
+router.get('/dashboard/top-by-line', DashboardController.getTop5SuppliesByLine)
+router.get('/dashboard/sectionmonth-by-line', DashboardController.getBudgetPerSectionMonthByLine)
+router.get('/dashboard/month-by-section', DashboardController.getBudgetPerMonthBySection)
 
 module.exports = router;

@@ -57,6 +57,14 @@ const searchWithPriceAvailable = async (term) =>
         .orWhere("uom", "like", `%${term}%`)
     })
 
+const getAllByPagination = async (offset, pageSize) =>
+  await db
+    .select("*")
+    .from("mst_material_supplies")
+    .where("is_removed", 0)
+    .offset(offset)
+    .limit(pageSize)
+
 module.exports = {
   getAll,
   getById,
@@ -67,5 +75,6 @@ module.exports = {
   updateByCode,
   getAllWithPriceAvailable,
   search,
-  searchWithPriceAvailable
+  searchWithPriceAvailable,
+  getAllByPagination
 };

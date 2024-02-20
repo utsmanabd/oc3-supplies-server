@@ -17,7 +17,13 @@ function error(res, message, code) {
     });
 }
 
+function catchError(res, err) {
+    console.error(err);
+    return error(res, `${err.name}: ${err.message}`, 500)
+}
+
 module.exports = {
     ok,
-    error
+    error,
+    catchError
 }

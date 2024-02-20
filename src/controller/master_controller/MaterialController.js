@@ -61,6 +61,19 @@ const searchMaterial = async (req, res) => {
     }
 }
 
+const getMaterialByPagination = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 25;
+        const offset = (page - 1) * pageSize;
+        const data = await model.getAllByPagination(offset, pageSize)
+        return api.ok(res, data)
+    } catch (err) {
+        console.error(err);
+        return api.error(res, `${err.name}: ${err.message}`, 500)
+    }
+}
+
 // test commit
 
 module.exports = {
@@ -69,5 +82,6 @@ module.exports = {
     insertMaterial,
     updateMaterial,
     getMaterialWithPriceAvailable,
-    searchMaterial
+    searchMaterial,
+    getMaterialByPagination
 }
