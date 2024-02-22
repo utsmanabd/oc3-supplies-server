@@ -2,14 +2,14 @@ const db = require("../database/supplies.config");
 
 const getBudgetPerLineByYear = async (year) =>
     await db('v_supplies_budgeting as vsb')
-        .select('vsb.line')
+        .select('vsb.line_id', 'vsb.line')
         .sum('vsb.price as price')
         .where('vsb.year', year)
         .groupBy('vsb.line_id');
 
 const getBudgetPerSectionByLine = async (year, lineId) =>
     await db('v_supplies_budgeting as vsb')
-        .select('vsb.section')
+        .select('vsb.cost_ctr_id', 'vsb.section')
         .sum('vsb.price as price')
         .where('vsb.budget_id', 'like', `%${year}-${lineId}%`)
         .groupBy('vsb.cost_ctr_id');
