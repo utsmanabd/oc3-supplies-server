@@ -2,9 +2,45 @@ const xlsx = require("xlsx")
 const materialModel = require("./src/model/material.model")
 const prodplanModel = require("./src/model/tr_prodplan.model")
 const suppliesModel = require("./src/model/tr_supplies.model")
+const costCenterModel = require("./src/model/cost_ctr.model")
+const actualModel = require("./src/model/tr_actual.model")
 
 const _year = 2024
 const _lineId = 4
+
+const sapSupplies = async () => {
+  console.log("Reading XLSX file...");
+  const workbook = xlsx.readFile('uploads/inject_data/sap_supplies_ready.xlsx')
+  const sheetName = workbook.SheetNames[0]
+  const sheet = workbook.Sheets[sheetName]
+  const data = xlsx.utils.sheet_to_json(sheet)
+
+  setTimeout(() => {
+    console.log("Raw data length: " + data.length);
+  }, 1500)
+
+  const injectionData = []
+
+  data.forEach(async (item, index) => {
+    const costCenter = await costCenterModel.search(item.cost_ctr)
+    const material = await materialModel.search(item.material_code)
+    if (costCenter.length == 1 && material.length == 1 && costCenter[0].line_id != null) {
+      item.cost_ctr_id = costCenter[0].id,
+      item.material_id = material[0].id
+      delete item['cost_ctr']
+      delete item['material_code']
+      injectionData.push(item)
+    }
+  })
+
+  setTimeout(async() => {
+    console.log("Injection length: " + injectionData.length);
+    console.log(injectionData);
+    await actualModel.insert(injectionData).then(() => {
+      console.log("Successfully inserted");
+    })
+  }, 3000)
+}
 
 const injectTrSuppliesBudget = async () => {
   console.log("Reading XLSX file...");
@@ -107,7 +143,23 @@ const injectMstMaterialSupplies = async () => {
   })
 }
 
+function getUniqueData(arr, property) {
+  let uniqueData = {};
+  let result = [];
+
+  for (let obj of arr) {
+    let value = obj[property];
+    if (!uniqueData[value]) {
+      uniqueData[value] = obj;
+      result.push(obj);
+    }
+  }
+
+  return result;
+}
+
 module.exports = {
   injectTrSuppliesBudget,
-  injectMstMaterialSupplies
+  injectMstMaterialSupplies,
+  sapSupplies
 }

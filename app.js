@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const mainRoutes = require("./src/routes/routes");
-const { injectMstMaterialSupplies, injectTrSuppliesBudget } = require('./inject');
+const { injectMstMaterialSupplies, injectTrSuppliesBudget, sapSupplies } = require('./inject');
 
 // parse requests of content-type - application/json
 app.use(express.json({ limit: '35mb' }));

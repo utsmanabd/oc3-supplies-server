@@ -9,6 +9,7 @@ const PlantController = require('../../controller/master_controller/PlantControl
 const ProdplanController = require('../../controller/master_controller/ProdplanController');
 const SuppliesController = require('../../controller/master_controller/SuppliesController');
 const DashboardController = require('../../controller/master_controller/DashboardController');
+const ActualController = require('../../controller/master_controller/ActualController')
 
 
 // Calculation Budget
@@ -82,5 +83,11 @@ router.get('/dashboard/supply-by-line', DashboardController.getBudgetPerSupplyBy
 router.get('/dashboard/top-by-line', DashboardController.getTop5SuppliesByLine)
 router.get('/dashboard/sectionmonth-by-line', DashboardController.getBudgetPerSectionMonthByLine)
 router.get('/dashboard/month-by-section', DashboardController.getBudgetPerMonthBySection)
+
+// Actual
+router.get('/actual/line-by-year', ActualController.getActualPerLineByYear)
+router.get('/actual/section-by-line', ActualController.getActualPerSectionByLine)
+router.get('/actual/sectionmonth-by-line', ActualController.getActualPerSectionMonthByLine)
+router.post('/actual', ActualController.insertActualBudget)
 
 module.exports = router;
