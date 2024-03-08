@@ -16,6 +16,15 @@ const getSuppliesByYearAndLine = async (req, res) => {
         let data = await model.getByYearAndLine(req.params.year, req.params.line);
         if (data.length > 0) {
             let transformedData = transformSuppliesViewData(data)
+            transformedData.forEach(item => {
+                item.average_price = +item.average_price
+                item.bom = +item.bom
+                item.budgeting_data.forEach(data => {
+                    data.prodplan = +data.prodplan
+                    data.quantity = +data.quantity
+                    data.price = +data.price
+                })
+            })
             return api.ok(res, transformedData);
         } else {
             return api.ok(res, data);
@@ -109,10 +118,19 @@ const updateWithBudgetAndProdplanId = async (req, res) => {
 const updateMultipleSupplies = async (req, res) => {
     try {
         let requestData = req.body.form_data
-        requestData.forEach(async (item) => {
-            await model.updateByBudgetId(item.budget_id, item.data)
+        const update = async (data) => {
+            return new Promise((resolve, reject) => {
+                data.forEach(async (item, index) => {
+                    await model.updateByBudgetId(item.budget_id, item.data)
+                    if (index === data.length - 1) {
+                        resolve(true)
+                    }
+                })
+            })
+        }
+        update(requestData).then(() => {
+            return api.ok(res, requestData)
         })
-        return api.ok(res, requestData)
     } catch (err) {
         console.error(err);
         return api.error(res, `${err.name}: ${err.message}`, 500)
@@ -181,5 +199,6 @@ module.exports = {
     getSuppliesByYearAndCostCenter,
     isBudgetIdExist,
     updateMultipleSupplies,
-    updateWithBudgetAndProdplanId
+    updateWithBudgetAndProdplanId,
+    transformSuppliesViewData
 }

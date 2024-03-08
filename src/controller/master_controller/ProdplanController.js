@@ -4,6 +4,7 @@ const api = require('../../tools/common')
 const getAllProdplan = async (req, res) => {
     try {
         let data = await model.getAll();
+        data.forEach(item => item.prodplan = +item.prodplan)
         return api.ok(res, data);
     } catch (err) {
         console.error(err);
@@ -14,6 +15,7 @@ const getAllProdplan = async (req, res) => {
 const getProdplanById = async (req, res) => {
     if (!isNaN(req.params.id)) {
         let data = await model.getById(req.params.id);
+        data.forEach(item => item.prodplan = +item.prodplan)
         return api.ok(res, data);
     } else {
         return api.error(res, "Bad Request", 400);
@@ -23,6 +25,7 @@ const getProdplanById = async (req, res) => {
 const getProdplanByYear = async (req, res) => {
     if (!isNaN(req.params.year)) {
         let data = await model.getByYear(req.params.year);
+        data.forEach(item => item.prodplan = +item.prodplan)
         return api.ok(res, data);
     } else {
         return api.error(res, "Bad Request", 400);
@@ -32,6 +35,7 @@ const getProdplanByYear = async (req, res) => {
 const getProdplanByYearAndLine = async (req, res) => {
     if (!isNaN(req.params.year) && !isNaN(req.params.line)) {
         let data = await model.getByYearAndLine(req.params.year, req.params.line);
+        data.forEach(item => item.prodplan = +item.prodplan)
         return api.ok(res, data);
     } else {
         return api.error(res, "Bad Request", 400);

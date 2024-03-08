@@ -2,6 +2,11 @@ const db = require("../database/supplies.config");
 
 const insert = async (data) => await db("tr_actual_budget").insert(data)
 
+const getActualSuppliesByYearAndLine = async (year, lineId) =>
+  await db.select("*").from("v_actual_budget").where("year", year).where("line_id", lineId)
+
+// Include Dashboard API
+
 const getActualPerLineByYear = async (year) =>
     await db('v_actual_budget as vab')
         .select('vab.line_id', 'vab.line')
@@ -25,9 +30,20 @@ const getActualPerSectionMonthByLine = async (year, lineId) =>
         .andWhere('vab.line_id', lineId)
         .groupBy('vab.section', 'vab.month');
 
+const getProdplanByYearAndLine = async (year, lineId) =>
+    await db
+        .select("*")
+        .from("tr_actual_prodplan")
+        .where("year", year)
+        .where("line_id", lineId)
+        .where("is_removed", 0)
+        .orderByRaw("length(`month`), `month`");
+
 module.exports = {
     insert,
+    getActualSuppliesByYearAndLine,
     getActualPerLineByYear,
     getActualPerSectionByLine,
-    getActualPerSectionMonthByLine
+    getActualPerSectionMonthByLine,
+    getProdplanByYearAndLine,
 }

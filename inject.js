@@ -11,35 +11,41 @@ const _lineId = 4
 const sapSupplies = async () => {
   console.log("Reading XLSX file...");
   const workbook = xlsx.readFile('uploads/inject_data/sap_supplies_ready.xlsx')
-  const sheetName = workbook.SheetNames[0]
-  const sheet = workbook.Sheets[sheetName]
+  
+  const januarySheet = workbook.SheetNames[0]
+  const februarySheet = workbook.SheetNames[1]
+
+  const sheet = workbook.Sheets[februarySheet]
   const data = xlsx.utils.sheet_to_json(sheet)
 
-  setTimeout(() => {
-    console.log("Raw data length: " + data.length);
-  }, 1500)
+  console.log(data.length);
+  await checkMaterial(data).then(async () => {
+    // Set the parameters to true if you want to check the factory line existence
+    await checkFactoryLine(true, data).then(() => {
+      console.log("Begin injecting actual data...")
+      const injectionData = []
 
-  const injectionData = []
-
-  data.forEach(async (item, index) => {
-    const costCenter = await costCenterModel.search(item.cost_ctr)
-    const material = await materialModel.search(item.material_code)
-    if (costCenter.length == 1 && material.length == 1 && costCenter[0].line_id != null) {
-      item.cost_ctr_id = costCenter[0].id,
-      item.material_id = material[0].id
-      delete item['cost_ctr']
-      delete item['material_code']
-      injectionData.push(item)
-    }
-  })
-
-  setTimeout(async() => {
-    console.log("Injection length: " + injectionData.length);
-    console.log(injectionData);
-    await actualModel.insert(injectionData).then(() => {
-      console.log("Successfully inserted");
+      data.forEach(async (item, index) => {
+        const costCenter = await costCenterModel.search(item.cost_ctr)
+        const material = await materialModel.search(item.material_code)
+        if (costCenter.length == 1 && material.length == 1 && costCenter[0].line_id != null) {
+          item.cost_ctr_id = costCenter[0].id,
+          item.material_id = material[0].id
+          delete item['cost_ctr']
+          delete item['material_code']
+          injectionData.push(item)
+        }
+      })
+    
+      setTimeout(async() => {
+        console.log("Actual data length: " + injectionData.length);
+        // console.log(injectionData);
+        await actualModel.insert(injectionData).then(() => {
+          console.log("Actual data successfully inserted");
+        })
+      }, 3000)
     })
-  }, 3000)
+  })
 }
 
 const injectTrSuppliesBudget = async () => {
@@ -156,6 +162,63 @@ function getUniqueData(arr, property) {
   }
 
   return result;
+}
+
+async function checkMaterial(matData) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log("Checking the material from the data source...");
+      let count = 0
+      let notFound = []
+      matData.forEach(async item => {
+        let data = await materialModel.getByCode(item.material_code)
+        if (data.length == 1) {
+          count++
+        } else notFound.push(item.material_code)
+      })
+      setTimeout(() => {
+        console.log("Total material found: " + count)
+        console.log("Material not found: ", notFound);
+
+        if (notFound.length > 0) {
+          console.log("Operation cancelled. There is an unknown material.");
+        } else {
+          console.log("Material checked successfully");
+          resolve(true)
+        }
+      }, 2000)
+
+    }, 250)
+  })
+}
+
+async function checkFactoryLine(isCheck, data = []) {
+  return new Promise((resolve, reject) => {
+    if (isCheck && data.length > 0) {
+      console.log("Checking the factory line from the data source...");
+      const costCenters = getUniqueData(data, "cost_ctr").map(item => item.cost_ctr)
+      let factoryLine = []
+      let notFactoryLine = []
+      costCenters.forEach(async item => {
+        let costData = await costCenterModel.search(item)
+        if (costData.length == 1 && costData[0].line_id!= null) {
+          factoryLine.push({costCenter: item, section: costData[0].section})
+        } else {
+          notFactoryLine.push({costCenter: item, section: costData[0].section})
+        }
+      })
+      setTimeout(() => {
+        console.log("Factory Line: ", factoryLine.sort((a, b) => a.costCenter - b.costCenter))
+        console.log("Not Factory Line: ", notFactoryLine.sort((a, b) => a.costCenter - b.costCenter));
+        console.log("Factory line checked successfully. Operation cancelled.");
+      }, 250)
+    } else {
+      console.log("Skip factory line checking. Continuing the operation...");
+      resolve(true)
+    }
+    
+  })
+  
 }
 
 module.exports = {

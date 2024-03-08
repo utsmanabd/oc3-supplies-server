@@ -85,9 +85,11 @@ router.get('/dashboard/sectionmonth-by-line', DashboardController.getBudgetPerSe
 router.get('/dashboard/month-by-section', DashboardController.getBudgetPerMonthBySection)
 
 // Actual
+router.get('/actual/supplies/:year/:line', ActualController.getActualSuppliesByYearAndLine)
 router.get('/actual/line-by-year', ActualController.getActualPerLineByYear)
 router.get('/actual/section-by-line', ActualController.getActualPerSectionByLine)
 router.get('/actual/sectionmonth-by-line', ActualController.getActualPerSectionMonthByLine)
+router.get('/actual/prodplan/year-line/:year/:line', ActualController.getProdplanByYearAndLine)
 router.post('/actual', ActualController.insertActualBudget)
 
 module.exports = router;
