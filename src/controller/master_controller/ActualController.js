@@ -67,6 +67,18 @@ const getActualPerSectionMonthByLine = async (req, res) => {
     }
 }
 
+const getActualPerSupplyByLine = async (req, res) => {
+    try {
+        const year = parseInt(req.query.year) || 0;
+        const lineId = parseInt(req.query.lineId) || 0;
+        let data = await model.getActualPerSupplyByLine(year, lineId);
+        data.forEach(item => item.price = +item.price)
+        return api.ok(res, data)
+    } catch (err) {
+        api.catchError(res, err)
+    } 
+}
+
 const getProdplanByYearAndLine = async (req, res) => {
     if (!isNaN(req.params.year) && !isNaN(req.params.line)) {
         let data = await model.getProdplanByYearAndLine(req.params.year, req.params.line);
@@ -83,5 +95,6 @@ module.exports = {
     getActualPerLineByYear,
     getActualPerSectionByLine,
     getActualPerSectionMonthByLine,
+    getActualPerSupplyByLine,
     getProdplanByYearAndLine
 }

@@ -30,6 +30,14 @@ const getActualPerSectionMonthByLine = async (year, lineId) =>
         .andWhere('vab.line_id', lineId)
         .groupBy('vab.section', 'vab.month');
 
+const getActualPerSupplyByLine = async (year, lineId) =>
+    await db('v_actual_budget as vab')
+        .select('vab.material_desc', 'vab.section')
+        .sum('vab.price as price')
+        .where('vab.year', `${year}`)
+        .andWhere('vab.line_id', lineId)
+        .groupBy('vab.budget_id');
+
 const getProdplanByYearAndLine = async (year, lineId) =>
     await db
         .select("*")
@@ -45,5 +53,6 @@ module.exports = {
     getActualPerLineByYear,
     getActualPerSectionByLine,
     getActualPerSectionMonthByLine,
+    getActualPerSupplyByLine,
     getProdplanByYearAndLine,
 }

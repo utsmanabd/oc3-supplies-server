@@ -89,6 +89,7 @@ router.get('/actual/supplies/:year/:line', ActualController.getActualSuppliesByY
 router.get('/actual/line-by-year', ActualController.getActualPerLineByYear)
 router.get('/actual/section-by-line', ActualController.getActualPerSectionByLine)
 router.get('/actual/sectionmonth-by-line', ActualController.getActualPerSectionMonthByLine)
+router.get('/actual/supply-by-line', ActualController.getActualPerSupplyByLine)
 router.get('/actual/prodplan/year-line/:year/:line', ActualController.getProdplanByYearAndLine)
 router.post('/actual', ActualController.insertActualBudget)
 
