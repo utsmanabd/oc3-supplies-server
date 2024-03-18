@@ -22,8 +22,24 @@ function catchError(res, err) {
     return error(res, `${err.name}: ${err.message}`, 500)
 }
 
+function getUniqueData(arr, property) {
+    let uniqueData = {};
+    let result = [];
+  
+    for (let obj of arr) {
+      let value = obj[property];
+      if (!uniqueData[value]) {
+        uniqueData[value] = obj;
+        result.push(obj);
+      }
+    }
+  
+    return result;
+  }
+
 module.exports = {
     ok,
     error,
-    catchError
+    catchError,
+    getUniqueData
 }

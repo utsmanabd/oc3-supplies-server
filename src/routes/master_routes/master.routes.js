@@ -9,8 +9,11 @@ const PlantController = require('../../controller/master_controller/PlantControl
 const ProdplanController = require('../../controller/master_controller/ProdplanController');
 const SuppliesController = require('../../controller/master_controller/SuppliesController');
 const DashboardController = require('../../controller/master_controller/DashboardController');
-const ActualController = require('../../controller/master_controller/ActualController')
+const ActualController = require('../../controller/master_controller/ActualController');
+const _XLSXController = require('../../controller/master_controller/_XlsxController')
 
+// Middleware
+const { uploadXlsx } = require('../../services/file-handler.service');
 
 // Calculation Budget
 router.get('/calculation', CalculationController.getAllCalculation)
@@ -92,5 +95,6 @@ router.get('/actual/sectionmonth-by-line', ActualController.getActualPerSectionM
 router.get('/actual/supply-by-line', ActualController.getActualPerSupplyByLine)
 router.get('/actual/prodplan/year-line/:year/:line', ActualController.getProdplanByYearAndLine)
 router.post('/actual', ActualController.insertActualBudget)
+router.post('/actual/xlsx', uploadXlsx.single('file'), ActualController.checkBeforeXLSXUpload, ActualController.uploadActualBudgetXLSX)
 
 module.exports = router;
