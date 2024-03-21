@@ -1,4 +1,5 @@
 const multer = require('multer');
+const api = require('../tools/common')
 
 const uploadXlsx = multer({
     storage: multer.memoryStorage(),
@@ -10,6 +11,17 @@ const uploadXlsx = multer({
     }
 })
 
+const handleUploadError = (err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        return api.error(res, err.message, 400)
+    }
+    if (err) {
+        return api.error(res, err.message, 500)
+    }
+    next()
+}
+
 module.exports = {
-    uploadXlsx
+    uploadXlsx,
+    handleUploadError
 }

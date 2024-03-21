@@ -5,6 +5,7 @@ const CalculationController = require('../../controller/master_controller/Calcul
 const CostCenterController = require('../../controller/master_controller/CostCenterController');
 const LineController = require('../../controller/master_controller/LineController');
 const MaterialController = require('../../controller/master_controller/MaterialController');
+const AveragPriceController = require('../../controller/master_controller/AveragePriceController')
 const PlantController = require('../../controller/master_controller/PlantController');
 const ProdplanController = require('../../controller/master_controller/ProdplanController');
 const SuppliesController = require('../../controller/master_controller/SuppliesController');
@@ -12,8 +13,9 @@ const DashboardController = require('../../controller/master_controller/Dashboar
 const ActualController = require('../../controller/master_controller/ActualController');
 const _XLSXController = require('../../controller/master_controller/_XlsxController')
 
+
 // Middleware
-const { uploadXlsx } = require('../../services/file-handler.service');
+const { uploadXlsx, handleUploadError } = require('../../services/file-handler.service');
 
 // Calculation Budget
 router.get('/calculation', CalculationController.getAllCalculation)
@@ -41,7 +43,14 @@ router.get('/material/with-price', MaterialController.getMaterialWithPriceAvaila
 router.get('/material/:id', MaterialController.getMaterialById)
 router.post('/material', MaterialController.insertMaterial);
 router.post('/material/search', MaterialController.searchMaterial);
+router.post('/material/search/pagination', MaterialController.searchMaterialByPagination);
 router.put('/material/:id', MaterialController.updateMaterial)
+
+// Average Price
+router.get('/avg-price', AveragPriceController.getAllAveragePrice)
+router.get('/avg-price/:id', AveragPriceController.getAveragePriceById)
+router.post('/avg-price', AveragPriceController.insertAveragePrice)
+router.put('/avg-price/:id', AveragPriceController.updateAveragePrice)
 
 // Factory Plant
 router.get('/plant', PlantController.getAllFactoryPlant)
@@ -95,6 +104,9 @@ router.get('/actual/sectionmonth-by-line', ActualController.getActualPerSectionM
 router.get('/actual/supply-by-line', ActualController.getActualPerSupplyByLine)
 router.get('/actual/prodplan/year-line/:year/:line', ActualController.getProdplanByYearAndLine)
 router.post('/actual', ActualController.insertActualBudget)
-router.post('/actual/xlsx', uploadXlsx.single('file'), ActualController.checkBeforeXLSXUpload, ActualController.uploadActualBudgetXLSX)
+
+// XLSX
+router.post('/xlsx/actual', uploadXlsx.single('file'), handleUploadError, _XLSXController.checkUploadedActual, _XLSXController.uploadActualBudget)
+router.post('/xlsx/plan', uploadXlsx.single('file'), handleUploadError, _XLSXController.checkUploadedPlan, _XLSXController.uploadPlanBudget)
 
 module.exports = router;

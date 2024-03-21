@@ -5,7 +5,7 @@ const suppliesModel = require("./src/model/tr_supplies.model")
 const costCenterModel = require("./src/model/cost_ctr.model")
 const actualModel = require("./src/model/tr_actual.model")
 
-const _year = 2024
+const _year = 2025
 const _lineId = 4
 
 const sapSupplies = async () => {
@@ -149,6 +149,25 @@ const injectMstMaterialSupplies = async () => {
   })
 }
 
+const injectTrAvgPrice = async () => {
+  return new Promise(async (resolve, reject) => {
+    let data = await materialModel.getAll()
+    let injectionData = []
+    data.forEach((item, index) => {
+      injectionData.push({
+        material_id: item.id,
+        year: _year,
+        average_price: item.average_price
+      })
+      if (index === data.length - 1) {
+        setTimeout(() => {
+          resolve(injectionData)
+        }, 50)
+      }
+    })
+  })
+}
+
 function getUniqueData(arr, property) {
   let uniqueData = {};
   let result = [];
@@ -222,6 +241,7 @@ async function checkFactoryLine(isCheck, data = []) {
 }
 
 module.exports = {
+  injectTrAvgPrice,
   injectTrSuppliesBudget,
   injectMstMaterialSupplies,
   sapSupplies

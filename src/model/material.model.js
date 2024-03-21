@@ -24,6 +24,11 @@ const getByCode = async (materialCode) =>
     .where("material_code", materialCode)
     .where("is_removed", 0);
 
+const getAvgPriceByCode = async (materialCode) =>
+  await db("v_material_supplies")
+    .select("*")
+    .where("material_code", `${materialCode}`)
+
 const updateByCode = async (code, data) =>
   await db("mst_material_supplies").where("material_code", code).update(data);
 
@@ -45,6 +50,19 @@ const search = async (term) =>
         .orWhere("uom", "like", `%${term}%`)
     })
   
+const searchPagination = async (term, offset, pageSize) =>
+  await db
+    .select("*")
+    .from("mst_material_supplies")
+    .where("is_removed", 0)
+    .andWhere(builder => {
+      builder.where(db.raw(`CAST(material_code AS CHAR)`), "like", `%${term}%`)
+        .orWhere("material_desc", "like", `%${term}%`)
+        .orWhere("uom", "like", `%${term}%`)
+    })
+    .offset(offset)
+    .limit(pageSize)
+    
 const searchWithPriceAvailable = async (term) =>
   await db
     .select("*")
@@ -65,6 +83,11 @@ const getAllByPagination = async (offset, pageSize) =>
     .offset(offset)
     .limit(pageSize)
 
+const getMaterialLength = async () =>
+  await db('mst_material_supplies')
+    .count("id", {as: 'total_material'})
+    .where("is_removed", 0)
+
 module.exports = {
   getAll,
   getById,
@@ -76,5 +99,7 @@ module.exports = {
   getAllWithPriceAvailable,
   search,
   searchWithPriceAvailable,
-  getAllByPagination
+  getAllByPagination,
+  getAvgPriceByCode,
+  getMaterialLength
 };
