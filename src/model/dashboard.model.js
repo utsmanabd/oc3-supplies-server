@@ -24,14 +24,14 @@ const getBudgetPerMonthByLine = async (year, lineId) =>
 
 const getBudgetPerSupplyByLine = async (year, lineId) =>
     await db('v_supplies_budgeting as vsb')
-        .select('vsb.material_desc', 'vsb.section')
+        .select('vsb.material_code', 'vsb.material_desc', 'vsb.section')
         .sum('vsb.price as price')
         .where('vsb.budget_id', 'like', `%${year}-${lineId}%`)
         .groupBy('vsb.budget_id');
 
 const getTop5SuppliesByLine = async (year, lineId) =>
     await db('v_supplies_budgeting as vsb')
-        .select('vsb.material_desc', 'vsb.section')
+        .select('vsb.material_code', 'vsb.material_desc', 'vsb.section')
         .sum('vsb.price as price')
         .where('vsb.budget_id', 'like', `%${year}-${lineId}%`)
         .groupBy('vsb.budget_id')

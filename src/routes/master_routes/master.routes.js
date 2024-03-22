@@ -38,9 +38,11 @@ router.put('/line/:id', LineController.updateLine)
 
 // Material Supplies
 router.get('/material', MaterialController.getAllMaterial)
+router.get('/material/uom', MaterialController.getAllUOM)
 router.get('/material/pagination', MaterialController.getMaterialByPagination)
 router.get('/material/with-price', MaterialController.getMaterialWithPriceAvailable)
 router.get('/material/:id', MaterialController.getMaterialById)
+router.get('/material/code/:code', MaterialController.getMaterialByCode)
 router.post('/material', MaterialController.insertMaterial);
 router.post('/material/search', MaterialController.searchMaterial);
 router.post('/material/search/pagination', MaterialController.searchMaterialByPagination);

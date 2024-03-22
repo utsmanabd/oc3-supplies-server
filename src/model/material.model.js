@@ -60,6 +60,7 @@ const searchPagination = async (term, offset, pageSize) =>
         .orWhere("material_desc", "like", `%${term}%`)
         .orWhere("uom", "like", `%${term}%`)
     })
+    .orderBy("material_code")
     .offset(offset)
     .limit(pageSize)
     
@@ -88,6 +89,16 @@ const getMaterialLength = async () =>
     .count("id", {as: 'total_material'})
     .where("is_removed", 0)
 
+const getMaterialSearchLength = async (term) =>
+  await db('mst_material_supplies')
+    .count("id", {as: 'total_material'})
+    .where("is_removed", 0)
+    .andWhere(builder => {
+      builder.where(db.raw(`CAST(material_code AS CHAR)`), "like", `%${term}%`)
+        .orWhere("material_desc", "like", `%${term}%`)
+        .orWhere("uom", "like", `%${term}%`)
+    })
+
 module.exports = {
   getAll,
   getById,
@@ -101,5 +112,7 @@ module.exports = {
   searchWithPriceAvailable,
   getAllByPagination,
   getAvgPriceByCode,
-  getMaterialLength
+  getMaterialLength,
+  searchPagination,
+  getMaterialSearchLength
 };

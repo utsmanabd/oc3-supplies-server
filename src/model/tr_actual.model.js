@@ -32,7 +32,7 @@ const getActualPerSectionMonthByLine = async (year, lineId) =>
 
 const getActualPerSupplyByLine = async (year, lineId) =>
     await db('v_actual_budget as vab')
-        .select('vab.material_desc', 'vab.section')
+        .select('vab.material_code', 'vab.material_desc', 'vab.section')
         .sum('vab.price as price')
         .where('vab.year', `${year}`)
         .andWhere('vab.line_id', lineId)
