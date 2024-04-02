@@ -37,6 +37,27 @@ const updateAveragePrice = async (req, res) => {
     }
 }
 
+const updateMultipleAvgPrice = async (req, res) => {
+    try {
+        let data = req.body.form_data
+        const beginUpdate = async () => {
+            return new Promise((resolve, reject) => {
+                data.forEach(async (item, index) => {
+                    await model.update(item.id, item.data)
+                    if (index === data.length - 1) {
+                        setTimeout(() => resolve(), 50)
+                    }
+                })
+            })
+        }
+        await beginUpdate().then(() => {
+            return api.ok(res, data)
+        })
+    } catch (err) {
+        return api.catchError(err)
+    }
+}
+
 const getAveragePriceByMaterialCode = async (req, res) => {
     try {
         let data = await model.getByCode(req.params.code)
@@ -57,37 +78,22 @@ const searchMaterialByYear = async (req, res) => {
     }
 }
 
-const getMaterialByPagination = async (req, res) => {
+const getAveragePriceByCodeAndYear = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1;
-        const pageSize = parseInt(req.query.pageSize) || 25;
-        const offset = (page - 1) * pageSize;
-        const data = await model.getAllByPagination(offset, pageSize)
-        const transformedData = Object.values(data.reduce((acc, curr) => {
-            const key = `${curr.material_id}-${curr.material_code}`;
-            if (!acc[key]) {
-                acc[key] = { ...curr, detail_price: [] };
-                delete acc[key]['year'], delete acc[key]['average_price'], delete acc[key]['avg_price_id']
-            }
-            acc[key].detail_price.push({
-                avg_price_id: curr.avg_price_id,
-                year: curr.year,
-                average_price: curr.average_price
-            });
-            return acc;
-        }, {}));
-        return api.ok(res, transformedData);
+        let materialCode = parseInt(req.query.code) || 0
+        let year = parseInt(req.query.year) || 0
+        let data = await model.getByCodeAndYear(materialCode, year)
+        return api.ok(res, data)
     } catch (err) {
-        return api.catchError(err)
+        return api.catchError(res, err)
     }
 }
-
-
-
 
 module.exports = {
     getAllAveragePrice,
     getAveragePriceById,
+    getAveragePriceByCodeAndYear,
     insertAveragePrice,
-    updateAveragePrice
+    updateAveragePrice,
+    updateMultipleAvgPrice
 }

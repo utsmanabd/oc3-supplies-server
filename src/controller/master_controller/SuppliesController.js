@@ -17,7 +17,7 @@ const getSuppliesByYearAndLine = async (req, res) => {
         if (data.length > 0) {
             let transformedData = transformSuppliesViewData(data)
             transformedData.forEach(item => {
-                item.average_price = +item.average_price
+                // item.average_price = +item.average_price
                 item.bom = +item.bom
                 item.budgeting_data.forEach(data => {
                     data.prodplan = +data.prodplan
@@ -163,7 +163,7 @@ const transformSuppliesViewData = (data) => {
                     material_desc: originalObj.material_desc,
                     calculation_by: originalObj.calculation_by,
                     uom: originalObj.uom,
-                    average_price: originalObj.average_price,
+                    // average_price: originalObj.average_price,
                     bom: originalObj.bom,
                     calculation_id: originalObj.calculation_id,
                     cost_ctr_id: originalObj.cost_ctr_id,

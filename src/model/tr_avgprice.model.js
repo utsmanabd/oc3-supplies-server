@@ -50,6 +50,12 @@ const getAllByPagination = async (offset, pageSize) =>
     .offset(offset)
     .limit(pageSize)
 
+const getByCodeAndYear = async (materialCode, year) =>
+  await db("v_material_supplies")
+    .select("*")
+    .where("material_code", `${materialCode}`)
+    .andWhere("year", `${year}`);
+
 module.exports = {
   getAll,
   getById,
@@ -60,5 +66,6 @@ module.exports = {
   getWithPriceAvailableByYear,
   searchByYear,
   searchWithPriceAvailableByYear,
-  getAllByPagination
+  getAllByPagination,
+  getByCodeAndYear
 };

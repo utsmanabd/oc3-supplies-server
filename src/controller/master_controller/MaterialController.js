@@ -114,13 +114,16 @@ async function mergeAvgPrice(dataSource) {
             dataSource.forEach(async (item, index) => {
                 let avgPrice = await model.getAvgPriceByCode(item.material_code)
                 item.detail_price = []
-                avgPrice.forEach((price) => {
-                    item.detail_price.push({
-                        year: price.year || null,
-                        avg_price_id: price.avg_price_id || null,
-                        average_price: +price.average_price || null
+                if (avgPrice.length > 0) {
+                    avgPrice.forEach((price) => {
+                        item.detail_price.push({
+                            year: price.year || null,
+                            avg_price_id: price.avg_price_id || null,
+                            average_price: +price.average_price || null,
+                            updated_at: price.updated_at ? price.updated_at : price.created_at
+                        })
                     })
-                })
+                }
                 delete item['average_price']
                 if (index === dataSource.length - 1) {
                     setTimeout(() => resolve(dataSource), 50)
@@ -129,8 +132,6 @@ async function mergeAvgPrice(dataSource) {
         } else resolve([])
     })
 }
-
-// test commit
 
 module.exports = {
     getAllMaterial,

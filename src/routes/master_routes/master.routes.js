@@ -13,6 +13,7 @@ const DashboardController = require('../../controller/master_controller/Dashboar
 const ActualController = require('../../controller/master_controller/ActualController');
 const _XLSXController = require('../../controller/master_controller/_XlsxController')
 
+const Middleware = require('../../middlewares/MasterMiddleware')
 
 // Middleware
 const { uploadXlsx, handleUploadError } = require('../../services/file-handler.service');
@@ -43,15 +44,17 @@ router.get('/material/pagination', MaterialController.getMaterialByPagination)
 router.get('/material/with-price', MaterialController.getMaterialWithPriceAvailable)
 router.get('/material/:id', MaterialController.getMaterialById)
 router.get('/material/code/:code', MaterialController.getMaterialByCode)
-router.post('/material', MaterialController.insertMaterial);
+router.post('/material', Middleware.checkMaterialAvailability, MaterialController.insertMaterial);
 router.post('/material/search', MaterialController.searchMaterial);
 router.post('/material/search/pagination', MaterialController.searchMaterialByPagination);
-router.put('/material/:id', MaterialController.updateMaterial)
+router.put('/material/:id', Middleware.checkMaterialAvailabilityUpdate, MaterialController.updateMaterial)
 
 // Average Price
 router.get('/avg-price', AveragPriceController.getAllAveragePrice)
+router.get('/avg-price/detail', AveragPriceController.getAveragePriceByCodeAndYear)
 router.get('/avg-price/:id', AveragPriceController.getAveragePriceById)
-router.post('/avg-price', AveragPriceController.insertAveragePrice)
+router.post('/avg-price', Middleware.checkAvgPriceAvailability, AveragPriceController.insertAveragePrice)
+router.post('/avg-price/multiple', AveragPriceController.updateMultipleAvgPrice)
 router.put('/avg-price/:id', AveragPriceController.updateAveragePrice)
 
 // Factory Plant
@@ -108,7 +111,9 @@ router.get('/actual/prodplan/year-line/:year/:line', ActualController.getProdpla
 router.post('/actual', ActualController.insertActualBudget)
 
 // XLSX
-router.post('/xlsx/actual', uploadXlsx.single('file'), handleUploadError, _XLSXController.checkUploadedActual, _XLSXController.uploadActualBudget)
-router.post('/xlsx/plan', uploadXlsx.single('file'), handleUploadError, _XLSXController.checkUploadedPlan, _XLSXController.uploadPlanBudget)
+router.post('/xlsx/actual', uploadXlsx.single('file'), handleUploadError, Middleware.checkUploadedActual, _XLSXController.uploadActualBudget)
+router.post('/xlsx/plan', uploadXlsx.single('file'), handleUploadError, Middleware.checkUploadedPlan, _XLSXController.uploadPlanBudget)
+router.post('/xlsx/material', uploadXlsx.single('file'), handleUploadError, Middleware.checkUploadedMaterial, _XLSXController.uploadMaterial)
+router.post('/xlsx/avgprice', uploadXlsx.single('file'), handleUploadError, Middleware.checkUploadedAvgPriceUpdate, _XLSXController.uploadAvgPriceUpdate)
 
 module.exports = router;
