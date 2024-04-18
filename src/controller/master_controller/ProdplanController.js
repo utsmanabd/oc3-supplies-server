@@ -72,6 +72,26 @@ const updateProdplan = async (req, res) => {
     }
 }
 
+const insertActualProdplan = async (req, res) => {
+    try {
+        let data = await model.insertActual(req.body.form_data);
+        return api.ok(res, data)
+    } catch (err) {
+        console.error(err);
+        return api.error(res, `${err.name}: ${err.message}`, 500)
+    }
+}
+
+const updateActualProdplan = async (req, res) => {
+    try {
+        let data = await model.updateActual(req.params.id, req.body.form_data);
+        return api.ok(res, data)
+    } catch (err) {
+        console.error(err);
+        return api.error(res, `${err.name}: ${err.message}`, 500)
+    }
+}
+
 const isProdplanExists = async (req, res) => {
     if (!isNaN(req.params.year) && !isNaN(req.params.line)) {
         let data = await model.getByYearAndLine(req.params.year, req.params.line);
@@ -95,6 +115,8 @@ module.exports = {
     getProdplanById,
     insertProdplan,
     updateProdplan,
+    insertActualProdplan,
+    updateActualProdplan,
     getProdplanGroupYears,
     getProdplanByYear,
     getProdplanByYearAndLine,

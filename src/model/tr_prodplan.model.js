@@ -51,6 +51,9 @@ const getByDateAndLine = async (month, year, lineId) =>
     .where("line_id", lineId)
     .where("is_removed", 0);
 
+const insertActual = async (data) => await db("tr_actual_prodplan").insert(data)
+const updateActual = async (id, data) => await db("tr_actual_prodplan").where("id", id).update(data)
+
 module.exports = {
   getAll,
   getById,
@@ -60,5 +63,7 @@ module.exports = {
   getByYear,
   getByDate,
   getByYearAndLine,
-  getByDateAndLine
+  getByDateAndLine,
+  insertActual,
+  updateActual
 };

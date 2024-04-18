@@ -26,9 +26,11 @@ router.put('/calculation/:id', CalculationController.updateCalculation)
 
 // Factory Cost Center
 router.get('/costctr', CostCenterController.getAllCostCenter)
+router.get('/costctr/countries', CostCenterController.getCountriesCode)
 router.get('/costctr/:id', CostCenterController.getCostCenterById)
 router.post('/costctr', CostCenterController.insertCostCenter)
 router.post('/costctr/search', CostCenterController.searchCostCenter)
+router.post('/costctr/search-pagination', CostCenterController.searchByPagination)
 router.put('/costctr/:id', CostCenterController.updateCostCenter)
 
 // Factory Line
@@ -71,7 +73,9 @@ router.get('/prodplan/year/:year', ProdplanController.getProdplanByYear)
 router.get('/prodplan/year-line/:year/:line', ProdplanController.getProdplanByYearAndLine)
 router.get('/prodplan/year-line/is-available/:year/:line', ProdplanController.isProdplanExists)
 router.post('/prodplan', ProdplanController.insertProdplan)
+router.post('/prodplan/actual', ProdplanController.insertActualProdplan)
 router.put('/prodplan/:id', ProdplanController.updateProdplan)
+router.put('/prodplan/actual/:id', ProdplanController.updateActualProdplan)
 
 // Supplies Budget
 router.get('/supplies', SuppliesController.getAllSuppliesBudget)
