@@ -8,7 +8,7 @@ const getBudgetPerLineByYear = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 
@@ -20,7 +20,7 @@ const getBudgetPerSectionByLine = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 
@@ -32,7 +32,7 @@ const getBudgetPerMonthByLine = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 
@@ -44,7 +44,7 @@ const getBudgetPerSupplyByLine = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 
@@ -56,7 +56,7 @@ const getTop5SuppliesByLine = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 
@@ -68,7 +68,7 @@ const getBudgetPerSectionMonthByLine = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 
@@ -81,7 +81,7 @@ const getBudgetPerMonthBySection = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 

@@ -6,8 +6,7 @@ const getAllFactoryPlant = async (req, res) => {
         let data = await model.getAll();
         return api.ok(res, data);
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -25,8 +24,7 @@ const insertFactoryPlant = async (req, res) => {
         let data = await model.insert(req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -35,8 +33,7 @@ const updateFactoryPlant = async (req, res) => {
         let data = await model.update(req.params.id, req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 

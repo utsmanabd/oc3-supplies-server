@@ -89,15 +89,18 @@ const getMaterialLength = async () =>
     .count("id", {as: 'total_material'})
     .where("is_removed", 0)
 
-const getMaterialSearchLength = async (term) =>
-  await db('mst_material_supplies')
-    .count("id", {as: 'total_material'})
-    .where("is_removed", 0)
-    .andWhere(builder => {
-      builder.where(db.raw(`CAST(material_code AS CHAR)`), "like", `%${term}%`)
-        .orWhere("material_desc", "like", `%${term}%`)
-        .orWhere("uom", "like", `%${term}%`)
-    })
+const getMaterialSearchLength = async (term) => {
+  const length = await db('mst_material_supplies')
+  .count("id", {as: 'total_material'})
+  .where("is_removed", 0)
+  .andWhere(builder => {
+    builder.where(db.raw(`CAST(material_code AS CHAR)`), "like", `%${term}%`)
+      .orWhere("material_desc", "like", `%${term}%`)
+      .orWhere("uom", "like", `%${term}%`)
+  })
+  return +length[0].total_material
+}
+  
 
 module.exports = {
   getAll,

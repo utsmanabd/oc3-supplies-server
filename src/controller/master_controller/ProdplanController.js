@@ -7,8 +7,7 @@ const getAllProdplan = async (req, res) => {
         data.forEach(item => item.prodplan = +item.prodplan)
         return api.ok(res, data);
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -47,8 +46,7 @@ const getProdplanGroupYears = async (req, res) => {
         let data = await model.getGroupYears();
         return api.ok(res, data);
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -57,8 +55,7 @@ const insertProdplan = async (req, res) => {
         let data = await model.insert(req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -67,8 +64,7 @@ const updateProdplan = async (req, res) => {
         let data = await model.update(req.params.id, req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -77,8 +73,7 @@ const insertActualProdplan = async (req, res) => {
         let data = await model.insertActual(req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -87,8 +82,7 @@ const updateActualProdplan = async (req, res) => {
         let data = await model.updateActual(req.params.id, req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 

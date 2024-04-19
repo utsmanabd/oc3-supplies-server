@@ -30,9 +30,8 @@ const search = async (term) =>
     })
 
 const searchPagination = async (term, offset, pageSize) =>
-  await db
+  await db("v_cost_center")
     .select("*")
-    .from("v_cost_center")
     .where("is_removed", 0)
     .andWhere(builder => {
       builder.where(db.raw(`CAST(cost_ctr AS CHAR)`), "like", `%${term}%`)
@@ -48,19 +47,25 @@ const searchPagination = async (term, offset, pageSize) =>
     .offset(offset)
     .limit(pageSize)
 
-const getSearchLength = async (term) =>
-  await db('v_cost_center')
-    .count("id", {as: 'total_cost_ctr'})
-    .where("is_removed", 0)
-    .andWhere(builder => {
-      builder.where(db.raw(`CAST(cost_ctr AS CHAR)`), "like", `%${term}%`)
-        .orWhere("section", "like", `%${term}%`)
-        .orWhere("line", "like", `%${term}%`)
-        .orWhere("cctc", "like", `%${term}%`)
-        .orWhere("cocd", "like", `%${term}%`)
-        .orWhere("coar", "like", `%${term}%`)
-        .orWhere("language", "like", `%${term}%`)
-    })
+const getSearchLength = async (term) => {
+  const length = await db('v_cost_center')
+  .count("id", {as: 'total_cost_ctr'})
+  .where("is_removed", 0)
+  .andWhere(builder => {
+    builder.where(db.raw(`CAST(cost_ctr AS CHAR)`), "like", `%${term}%`)
+      .orWhere("section", "like", `%${term}%`)
+      .orWhere("line", "like", `%${term}%`)
+      .orWhere("cctc", "like", `%${term}%`)
+      .orWhere("cocd", "like", `%${term}%`)
+      .orWhere("coar", "like", `%${term}%`)
+      .orWhere("language", "like", `%${term}%`)
+  })
+  return +length[0].total_cost_ctr
+}
+
+const getByLineId = async (lineId) =>
+  await db.select("*").from("v_cost_center").where("line_id", lineId)
+  
   
 module.exports = {
   getAll,
@@ -69,5 +74,6 @@ module.exports = {
   update,
   search,
   searchPagination,
-  getSearchLength
+  getSearchLength,
+  getByLineId
 };

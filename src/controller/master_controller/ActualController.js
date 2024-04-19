@@ -7,7 +7,7 @@ const insertActualBudget = async (req, res) => {
         let data = await model.insert(req.body.form_data)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 
@@ -39,7 +39,7 @@ const getActualPerLineByYear = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 
@@ -51,7 +51,7 @@ const getActualPerSectionByLine = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 
@@ -63,7 +63,7 @@ const getActualPerSectionMonthByLine = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     }
 }
 
@@ -75,7 +75,7 @@ const getActualPerSupplyByLine = async (req, res) => {
         data.forEach(item => item.price = +item.price)
         return api.ok(res, data)
     } catch (err) {
-        api.catchError(res, err)
+        return api.catchError(res, err)
     } 
 }
 

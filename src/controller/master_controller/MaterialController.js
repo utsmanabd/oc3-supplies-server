@@ -77,7 +77,7 @@ const searchMaterialByPagination = async (req, res) => {
         const mergedData = await mergeAvgPrice(data)
         const total = await model.getMaterialSearchLength(term)
 
-        return res.json({ status: true, total_material: total[0].total_material, data: mergedData })
+        return res.json({ status: true, total_material: total, data: mergedData })
     } catch (err) {
         return api.catchError(res, err)
     }    

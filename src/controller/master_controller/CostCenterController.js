@@ -8,8 +8,16 @@ const getAllCostCenter = async (req, res) => {
         let data = await model.getAll();
         return api.ok(res, data);
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(err)
+    }
+}
+
+const getCostCenterByLineId = async (req, res) => {
+    try {
+        let data = await model.getByLineId(req.params.id);
+        return api.ok(res, data);
+    } catch (err) {
+        return api.catchError(err)
     }
 }
 
@@ -22,7 +30,7 @@ const searchByPagination = async (req, res) => {
         const data = await model.searchPagination(term, offset, pageSize)
         const total = await model.getSearchLength(term)
 
-        return res.json({ status: true, total_cost_ctr: total[0].total_cost_ctr, data: data })
+        return res.json({ status: true, total_cost_ctr: total, data: data })
     } catch (err) {
         return api.catchError(res, err)
     }
@@ -42,8 +50,7 @@ const insertCostCenter = async (req, res) => {
         let data = await model.insert(req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(err)
     }
 }
 
@@ -52,8 +59,7 @@ const updateCostCenter = async (req, res) => {
         let data = await model.update(req.params.id, req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(err)
     }
 }
 
@@ -63,8 +69,7 @@ const searchCostCenter = async (req, res) => {
         let data = await model.search(query)
         return api.ok(res, data)
     } catch (err) {
-        console.error(err)
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(err)
     }
 }
 
@@ -87,5 +92,6 @@ module.exports = {
     updateCostCenter,
     searchCostCenter,
     searchByPagination,
-    getCountriesCode
+    getCountriesCode,
+    getCostCenterByLineId
 }

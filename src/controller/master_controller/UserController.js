@@ -6,6 +6,21 @@ const getAllUsers = async (req, res) => {
     return api.ok(res, data);
 }
 
+const searchUserByPagination = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 25;
+        const offset = (page - 1) * pageSize;
+        const term = req.body.search
+        const data = await model.searchPagination(term, offset, pageSize)
+        const total = await model.getSearchLength(term)
+
+        return res.json({ status: true, total_users: total, data: data })
+    } catch (err) {
+        return api.catchError(res, err)
+    }
+}
+
 const getUserByNik = async (req, res) => {
     if (!isNaN(req.params.id)) {
         let data = await model.getByNik(req.params.id);
@@ -35,7 +50,7 @@ const insertUser = async (req, res) => {
     } else {
         const userNik = await model.getByNik(req.body.form_data.nik)
         if (userNik.length > 0) {
-            return api.error(res, "NIK is already exists!", 200)
+            return api.error(res, "NIK is already exists!", 400)
         }
         let data = await model.insert(formData);
         return api.ok(res, data);
@@ -45,8 +60,24 @@ const insertUser = async (req, res) => {
 const updateUser = async (req, res) => {
     const userId = req.params.id
     let formData = req.body.form_data
+    let nik = formData.nik
+    if (nik) {
+        const userFound = await model.getByNik(nik)
+        if (userFound.length > 0 && userFound[0].user_id != userId) {
+            return api.error(res, "NIK is already exists!", 400)
+        }
+    }
     let data = await model.update(userId, formData);
     return api.ok(res, data);
+}
+
+const deleteUser = async (req, res) => {
+    try {
+        let data = await model.deleteData(req.params.id)
+        return api.ok(res, data);
+    } catch (err) {
+        return api.catchError(res, err)
+    }
 }
 
 const isNIKExists = async (req, res) => {
@@ -59,6 +90,13 @@ const isNIKExists = async (req, res) => {
 }
 
 module.exports = {
-    getAllUsers, getUserByNik, insertUser, updateUser, isNIKExists, getUserRole
+    getAllUsers, 
+    searchUserByPagination,
+    getUserByNik, 
+    insertUser, 
+    updateUser, 
+    deleteUser,
+    isNIKExists, 
+    getUserRole
 }
 

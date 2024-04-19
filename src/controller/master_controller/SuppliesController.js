@@ -6,8 +6,7 @@ const getAllSuppliesBudget = async (req, res) => {
         let data = await model.getAll();
         return api.ok(res, data);
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -62,8 +61,7 @@ const insertSuppliesBudget = async (req, res) => {
         let data = await model.insert(req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -72,8 +70,7 @@ const updateSuppliesBudget = async (req, res) => {
         let data = await model.updateByBudgetId(req.params.budgetid, req.body.form_data);
         return api.ok(res, data)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -94,8 +91,7 @@ const isBudgetIdExist = async (req, res) => {
         })
         
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -110,8 +106,7 @@ const updateWithBudgetAndProdplanId = async (req, res) => {
             return api.ok(res, requestData)
         } else return api.error(res, `Data length is less than 12`, 400)
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
@@ -132,8 +127,7 @@ const updateMultipleSupplies = async (req, res) => {
             return api.ok(res, requestData)
         })
     } catch (err) {
-        console.error(err);
-        return api.error(res, `${err.name}: ${err.message}`, 500)
+        return api.catchError(res, err)
     }
 }
 
