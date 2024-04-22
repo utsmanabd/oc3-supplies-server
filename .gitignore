@@ -9,4 +9,4 @@
 # Node
 /node_modules
 /env
-/uploads/*
+/uploads/inject_data/*
